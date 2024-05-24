@@ -16,7 +16,7 @@ class Cola
     string dequeue();
     string first();
     bool isEmpty();  // Método para verificar si la cola está vacía
-
+    bool estaVacia()
 };
 
 #endif // COLA_H
