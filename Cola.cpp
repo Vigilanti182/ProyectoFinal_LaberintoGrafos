@@ -46,3 +46,7 @@ string Cola::first() {
 bool Cola::isEmpty() {
     return primero == nullptr;
 }
+
+bool Cola::isEmpty() {
+    return primero == nullptr;
+}
