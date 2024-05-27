@@ -47,6 +47,3 @@ bool Cola::isEmpty() {
     return primero == nullptr;
 }
 
-bool Cola::isEmpty() {
-    return primero == nullptr;
-}
