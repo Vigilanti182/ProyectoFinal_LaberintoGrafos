@@ -1,88 +1,78 @@
 #include <iostream>
 #include <fstream>
 #include "Grafo.h"
-#include <ctime> // Incluimos esta biblioteca para cronometrar el tiempo de ejecución
-using namespace std;
+#include <ctime> // Biblioteca para medir el tiempo
 
-void mostrarMenu() {
-    cout << "------ MENU ------" << endl;
-    cout << "1. Mostrar Matriz de Adyacencia Vacia" << endl;
-    cout << "2. Mostrar Lista de Nodos" << endl;
-    cout << "3. Generar y Mostrar Matriz de Adyacencia del Grafo" << endl;
-    cout << "4. Realizar Busqueda en Anchura (BFS)" << endl;
-    cout << "5. Realizar Busqueda en Profundidad (DFS)" << endl;
-    cout << "6. Salir" << endl;
-    cout << "Elija una opcion: ";
-}
+using namespace std;
 
 int main() {
     string s = "Laberinto.txt";
     Grafo g(s);
+    g.generaListaNodos();
+    g.generaMatriz();
+    cout << " " << endl;
+
     int opcion;
     do {
-        mostrarMenu();
+        cout << "===== MENU =====" << endl;
+        cout << "1. Mostrar lista de nodos" << endl;
+        cout << "2. Busqueda por anchura (BFS)" << endl;
+        cout << "3. Busqueda por profundidad (DFS)" << endl;
+        cout << "4. Salir" << endl;
+        cout << "Ingrese una opcion: ";
+        cout << " ";
         cin >> opcion;
+
         switch (opcion) {
-            case 1:
-
-                cout << "----------MATRIZ de Adyacencia Vacia----------" << endl;
-                g.muestraMatriz();
-                cout << " " << endl;
-                break;
-
-            case 2:
-
+            case 1: {
                 cout << "----------Lista de Nodos----------" << endl;
-                g.generaListaNodos();
+                cout << " " << endl;
+
                 g.muestraListaNodos();
-                cout << " " << endl;
-
                 break;
-            case 3:
-
-                cout << "----------Matriz de Adyacencia del Grafo----------" << endl;
-                g.generaMatriz();
-                g.muestraMatriz();
-                cout << " " << endl;
-
-                break;
-            case 4: {
-
+            }
+            case 2: {
                 cout << "----------Busqueda en Anchura (BFS)----------" << endl;
-                g.generaMatriz(); // Se tiene que mandar llamar al metodo genera matriz antes para
-                //para que la busqueda BFS se ejecute correctamente
+                cout << " " << endl;
 
-                clock_t start_bfs = clock(); // Incializar tiempo para BFS
+                // Inicia el cronómetro antes de comenzar la búsqueda en anchura (BFS)
+                clock_t start_bfs = clock();
                 g.busquedaAnchura();
-
-                clock_t end_bfs = clock(); // Finalizar tiempo para BFS
+                // Detiene el cronómetro después de que la búsqueda en anchura haya terminado
+                clock_t end_bfs = clock();
+                // Calcula el tiempo transcurrido en milisegundos
                 double elapsed_bfs = double(end_bfs - start_bfs) / CLOCKS_PER_SEC * 1000;
+                // Muestra el tiempo de ejecución
                 cout << "Tiempo de ejecucion BFS: " << elapsed_bfs << " ms" << endl;
-                cout << " " << endl;
                 break;
             }
-            case 5: {
-
+            case 3: {
                 cout << "----------Busqueda en Profundidad (DFS)----------" << endl;
-                g.generaMatriz();
 
-                clock_t start_dfs = clock(); // inicializar tiempo para DFS
-                g.busquedaProfundidad();
-
-                clock_t end_dfs = clock(); // finalizar tiempo para DFS
-                double elapsed_dfs = double(end_dfs - start_dfs) / CLOCKS_PER_SEC * 1000;
-                cout << "Tiempo de ejecucion DFS: " << elapsed_dfs << " ms" << endl;
                 cout << " " << endl;
+
+                // Inicia el cronómetro antes de comenzar la búsqueda en profundidad (DFS)
+                clock_t start_dfs = clock();
+                g.busquedaProfundidad();
+                // Detiene el cronómetro después de que la búsqueda en profundidad haya terminado
+                clock_t end_dfs = clock();
+                // Calcula el tiempo transcurrido en milisegundos
+                double elapsed_dfs = double(end_dfs - start_dfs) / CLOCKS_PER_SEC * 1000;
+                // Muestra el tiempo de ejecución
+                cout << "Tiempo de ejecucion DFS: " << elapsed_dfs << " ms" << endl;
                 break;
             }
-            case 6:
-
-                cout << "Saliendo del programa." << endl;
+            case 4: {
+                cout << "Saliendo del programa..." << endl;
                 break;
-
-            default:
-                cout << "Opcion no valida. Por favor, intente de nuevo." << endl;
+            }
+            default: {
+                cout << "Opcion invalida. Por favor, ingrese una opcion valida." << endl;
+            }
         }
-    } while (opcion != 6);
+        cout << endl;
+    } while (opcion != 4);
+
     return 0;
 }
+
