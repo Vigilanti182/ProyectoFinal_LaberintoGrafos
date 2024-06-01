@@ -88,130 +88,131 @@ void Grafo::muestraMatriz() {
     }
 }
 
-void Grafo::busquedaAnchura() {
-    int inicio = 0; // Índice del nodo de inicio
-    int fin = numNodos - 1; // Índice del nodo de fin
 
-    int* padre = new int[numNodos]; // Arreglo para almacenar nodos padres
-    int* pesosCamino = new int[numNodos]; // Arreglo para almacenar pesos de las aristas en el camino
+void Grafo::busquedaAnchura() {
+    int inicio = 0; // Índice del nodo de inicio (N1)
+    int fin = numNodos - 1; // Índice del nodo de fin (N41)
+
+    int* padre = new int[numNodos]; // Arreglo para almacenar nodos padres. Esto ayudará a reconstruir el camino.
+    int* pesosCamino = new int[numNodos]; // Arreglo para almacenar pesos de las aristas en el camino.
 
     // Inicializar todos los nodos como no visitados
     for (int i = 0; i < numNodos; ++i) {
-        listaNodos[i].setVisitado(false);
-        padre[i] = -1; // -1 indica nodo sin padre
-        pesosCamino[i] = 0; // Inicializar pesos de las aristas en 0
+        listaNodos[i].setVisitado(false); // Marcar el nodo como no visitado.
+        padre[i] = -1; // -1 indica que el nodo no tiene padre.
+        pesosCamino[i] = 0; // Inicializar pesos de las aristas en 0.
     }
 
-    Cola cola; // Crear cola vacía
+    Cola cola; // Crear cola vacía para la BFS.
 
-    cola.enqueue(listaNodos[inicio].getNom()); // Encolar nodo de inicio
-    listaNodos[inicio].setVisitado(true); // Marcar nodo de inicio como visitado
+    cola.enqueue(listaNodos[inicio].getNom()); // Encolar el nombre del nodo de inicio.
+    listaNodos[inicio].setVisitado(true); // Marcar el nodo de inicio como visitado.
 
-    bool caminoEncontrado = false; // Bandera para indicar si se encontró un camino
+    bool caminoEncontrado = false; // Bandera para indicar si se encontró un camino.
 
-    while (!cola.isEmpty()) { // Mientras la cola no esté vacía
-        string nodoActual = cola.dequeue(); // Desencolar nodo
-        int nodo = buscaNodo(nodoActual); // Obtener índice del nodo actual
+    while (!cola.isEmpty()) { // Mientras la cola no esté vacía.
+        string nodoActualNom = cola.dequeue(); // Desencolar el nombre del nodo.
+        int nodoActual = buscaNodo(nodoActualNom); // Obtener el índice del nodo actual a partir de su nombre.
 
-        cout << "Visitando nodo: " << nodoActual << endl; // Imprimir nodo visitado
+        cout << "Visitando nodo: " << nodoActualNom << endl; // Imprimir el nodo visitado.
 
-        if (nodo == fin && !caminoEncontrado) { // Si se encuentra el nodo final
-            caminoEncontrado = true; // Marcar bandera
+        if (nodoActual == fin && !caminoEncontrado) { // Si se encuentra el nodo final.
+            caminoEncontrado = true; // Marcar bandera como verdadero.
         }
 
-        // Iterar sobre todos los nodos posibles
+        // Iterar sobre todos los nodos posibles.
         for (int i = 0; i < numNodos; ++i) {
-            int pesoArista = matAdj[nodo][i]; // Peso de la arista entre el nodo actual y el nodo i
+            int pesoArista = matAdj[nodoActual][i]; // Peso de la arista entre el nodo actual y el nodo i.
 
-            bool visitado = listaNodos[i].getVisitado(); // Estado de visitado del nodo i
-
-            // Verificar si hay una arista entre el nodo actual y el nodo i, y si el nodo i no ha sido visitado
-            if (pesoArista != 0 && !visitado) {
-                // Encolar el nodo vecino i
-                cola.enqueue(listaNodos[i].getNom());
-                // Marcar el nodo vecino i como visitado
-                listaNodos[i].setVisitado(true);
-                // Registrar que el nodo actual es el padre del nodo vecino i
-                padre[i] = nodo;
-                // Actualizar el peso del camino para el nodo vecino i
-                pesosCamino[i] = pesosCamino[nodo] + pesoArista;
+            if (pesoArista != 0 && !listaNodos[i].getVisitado()) { // Si hay una arista y el nodo no ha sido visitado.
+                cola.enqueue(listaNodos[i].getNom()); // Encolar el nombre del nodo vecino i.
+                listaNodos[i].setVisitado(true); // Marcar el nodo vecino i como visitado.
+                padre[i] = nodoActual; // Registrar que el nodo actual es el padre del nodo vecino i.
+                pesosCamino[i] = pesosCamino[nodoActual] + pesoArista; // Actualizar el peso del camino para el nodo vecino i.
             }
         }
     }
 
-    if (caminoEncontrado) { // Si se encontró un camino
+    if (caminoEncontrado) { // Si se encontró un camino.
         cout << "Camino encontrado (Busqueda por Anchura): ";
-        int pesoTotalCamino = pesosCamino[fin]; // Obtener el peso total del camino
-        imprimirCamino(padre, inicio, fin); // Imprimir camino
+        int pesoTotalCamino = pesosCamino[fin]; // Obtener el peso total del camino.
+        imprimirCamino(padre, inicio, fin); // Imprimir el camino.
         cout << endl;
-        cout << "Peso total del camino: " << pesoTotalCamino << endl; // Imprimir peso total del camino
+        cout << "Peso total del camino: " << pesoTotalCamino << endl; // Imprimir el peso total del camino.
     } else {
-        cout << "No se encontró camino." << endl; // Si no se encontró camino
+        cout << "No se encontró camino." << endl; // Si no se encontró camino.
     }
 
-    delete[] padre; // Liberar memoria del arreglo padre
-    delete[] pesosCamino; // Liberar memoria del arreglo pesosCamino
+    delete[] padre; // Liberar memoria del arreglo padre.
+    delete[] pesosCamino; // Liberar memoria del arreglo pesosCamino.
 }
 
 
 void Grafo::busquedaProfundidad() {
-    int inicio = 0; // Índice del nodo de inicio
-    int fin = numNodos - 1; // Índice del nodo de fin
-    int* padre = new int[numNodos]; // Arreglo para almacenar nodos padres
-    int* pesosCamino = new int[numNodos]; // Arreglo para almacenar pesos de las aristas en el camino
+    int inicio = 0; // Primer nodo (N1)
+    int fin = numNodos - 1; // Último nodo (N41)
 
-    // Inicializar todos los nodos como no visitados
-    for (int i = 0; i < numNodos; ++i) {
-        listaNodos[i].setVisitado(false);
-        padre[i] = -1; // -1 indica nodo sin padre
-        pesosCamino[i] = 0; // Inicializar pesos de las aristas en 0
+    // Inicializar todos los nodos como no visitados.
+    for (int i = 0; i < numNodos; i++) {
+        listaNodos[i].setVisitado(false); // Marcar cada nodo como no visitado.
     }
 
-    Pila pila; // Crear pila vacía
-    pila.push(listaNodos[inicio].getNom()); // Agregar el nodo de inicio a la pila
-    listaNodos[inicio].setVisitado(true); // Marcar el nodo inicial como visitado
+    int* anterior = new int[numNodos]; // Arreglo para almacenar el nodo anterior en el camino.
+    for (int i = 0; i < numNodos; i++) {
+        anterior[i] = -1; // Inicializar todos los nodos como sin padre (-1).
+    }
 
-    bool caminoEncontrado = false; // Bandera para indicar si se encontró un camino
+    Pila pila; // Crear una pila para la DFS.
+    pila.push(listaNodos[inicio].getNom()); // Apilar el nombre del nodo de inicio.
 
-    while (!pila.isEmpty()) { // Mientras la pila no esté vacía
-        string nodoActual = pila.pop(); // Sacar un nodo de la pila
-        int nodo = buscaNodo(nodoActual); // Obtener índice del nodo actual
-        cout << "Visitando nodo: " << nodoActual << endl; // Imprimir nodo visitado
+    while (!pila.isEmpty()) { // Mientras la pila no esté vacía.
+        string nodoActualNom = pila.top(); // Obtener el nombre del nodo en la cima de la pila.
+        int nodoActual = buscaNodo(nodoActualNom); // Obtener el índice del nodo actual.
+        pila.pop(); // Desapilar el nodo.
 
-        if (nodo == fin && !caminoEncontrado) { // Si se encuentra el nodo final
-            caminoEncontrado = true; // Marcar bandera
-        }
+        if (!listaNodos[nodoActual].getVisitado()) { // Si el nodo no ha sido visitado.
+            listaNodos[nodoActual].setVisitado(true); // Marcar el nodo como visitado.
+            cout << "Visitando nodo: " << nodoActualNom << endl; // Imprimir el nodo visitado.
 
-        // Iterar sobre todos los nodos vecinos en orden ascendente
-        for (int i = 0; i < numNodos; ++i) {
-            if (matAdj[nodo][i] != 0 && !listaNodos[i].getVisitado()) { // Si hay arista y el nodo no ha sido visitado
-                pila.push(listaNodos[i].getNom()); // Agregar nodo vecino a la pila
-                listaNodos[i].setVisitado(true); // Marcar nodo vecino como visitado
-                padre[i] = nodo; // Asignar nodo actual como padre del nodo vecino
-                pesosCamino[i] = pesosCamino[nodo] + 1; // Actualizar el peso del camino para el nodo vecino i
+            if (nodoActual == fin) { // Si se encuentra el nodo final.
+                // Imprimir el camino encontrado.
+                cout << "Camino encontrado (Busqueda por Profundidad): ";
+                imprimirCamino(anterior, inicio, fin);
+                cout << endl;
+
+                // Calcular el peso total del camino.
+                int pesoTotal = 0;
+                int nodoActualPeso = fin;
+                while (anterior[nodoActualPeso] != -1) { // Recorrer el camino hasta el inicio.
+                    pesoTotal += matAdj[nodoActualPeso][anterior[nodoActualPeso]]; // Sumar el peso de cada arista.
+                    nodoActualPeso = anterior[nodoActualPeso]; // Moverse al nodo anterior.
+                }
+                cout << "Peso total del camino: " << pesoTotal << endl; // Imprimir el peso total del camino.
+
+                delete[] anterior; // Liberar memoria del arreglo anterior.
+                return; // Terminar la búsqueda.
+            }
+
+            // Añadir nodos adyacentes a la pila.
+            for (int i = numNodos - 1; i >= 0; --i) { // Iterar en orden inverso para mantener el orden de visita.
+                if (matAdj[nodoActual][i] != 0 && !listaNodos[i].getVisitado()) { // Si hay una arista y el nodo no ha sido visitado.
+                    pila.push(listaNodos[i].getNom()); // Apilar el nombre del nodo vecino.
+                    anterior[i] = nodoActual; // Registrar que el nodo actual es el padre del nodo vecino i.
+                }
             }
         }
     }
 
-    if (caminoEncontrado) { // Si se encontró un camino
-        cout << "Camino encontrado (Busqueda por Profundidad): ";
-        int pesoTotalCamino = pesosCamino[fin]; // Obtener el peso total del camino
-        imprimirCamino(padre, inicio, fin); // Imprimir camino
-        cout << endl;
-        cout << "Peso total del camino: " << pesoTotalCamino << endl; // Imprimir peso total del camino
-    } else {
-        cout << "No se encontró camino." << endl; // Si no se encontró camino
-    }
-
-    delete[] padre; // Liberar memoria del arreglo padre
-    delete[] pesosCamino; // Liberar memoria del arreglo pesosCamino
+    cout << "No se encontro camino." << endl; // Si no se encontró camino.
+    delete[] anterior; // Liberar memoria del arreglo anterior.
 }
 
+
 void Grafo::imprimirCamino(int* padre, int inicio, int fin) {
-    if (fin == -1) { // Si se llega al nodo inicial (fin == -1)
-        return; // Salir de la recursión
+    if (fin == -1) { // Si se llega al nodo inicial (fin == -1).
+        return; // Salir de la recursión.
     }
 
-    imprimirCamino(padre, inicio, padre[fin]); // Llamada recursiva con el nodo padre
-    cout << listaNodos[fin].getNom() << " "; // Imprimir el nombre del nodo actual
+    imprimirCamino(padre, inicio, padre[fin]); // Llamada recursiva con el nodo padre.
+    cout << listaNodos[fin].getNom() << " "; // Imprimir el nombre del nodo actual.
 }
