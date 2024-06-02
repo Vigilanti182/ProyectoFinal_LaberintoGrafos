@@ -68,7 +68,6 @@ void Grafo::generaMatriz() {
             matAdj[posDestino][posOrigen] = peso; // Para grafo no dirigido
         }
     }
-    muestraMatriz(); // Mostrar la matriz de adyacencia
 }
 
 void Grafo::muestraListaNodos() {
