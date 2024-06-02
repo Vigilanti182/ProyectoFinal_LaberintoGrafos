@@ -36,7 +36,7 @@ int main() {
                 cout << "----------Busqueda en Anchura (BFS)----------" << endl;
                 cout << " " << endl;
                 g.muestraMatriz();
-
+                cout << " " << endl;
                 // Inicia el cronómetro antes de comenzar la búsqueda en anchura (BFS)
                 clock_t start_bfs = clock();
                 g.busquedaAnchura();
@@ -53,7 +53,7 @@ int main() {
                 cout << "----------Busqueda en Profundidad (DFS)----------" << endl;
                 cout << " " << endl;
                 g.muestraMatriz();
-
+                cout << " " << endl;
                 // Inicia el cronómetro antes de comenzar la búsqueda en profundidad (DFS)
                 clock_t start_dfs = clock();
                 g.busquedaProfundidad();
@@ -78,5 +78,4 @@ int main() {
 
     return 0;
 }
-
 
