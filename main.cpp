@@ -20,11 +20,11 @@ int main() {
         cout << "3. Busqueda por profundidad (DFS)" << endl;
         cout << "4. Salir" << endl;
         cout << "Ingrese una opcion: ";
-        cout << " ";
         cin >> opcion;
 
         switch (opcion) {
             case 1: {
+                cout << " " << endl;
                 cout << "----------Lista de Nodos----------" << endl;
                 cout << " " << endl;
 
@@ -32,8 +32,10 @@ int main() {
                 break;
             }
             case 2: {
+                cout << " " << endl;
                 cout << "----------Busqueda en Anchura (BFS)----------" << endl;
                 cout << " " << endl;
+                g.muestraMatriz();
 
                 // Inicia el cronómetro antes de comenzar la búsqueda en anchura (BFS)
                 clock_t start_bfs = clock();
@@ -47,9 +49,10 @@ int main() {
                 break;
             }
             case 3: {
-                cout << "----------Busqueda en Profundidad (DFS)----------" << endl;
-
                 cout << " " << endl;
+                cout << "----------Busqueda en Profundidad (DFS)----------" << endl;
+                cout << " " << endl;
+                g.muestraMatriz();
 
                 // Inicia el cronómetro antes de comenzar la búsqueda en profundidad (DFS)
                 clock_t start_dfs = clock();
@@ -75,4 +78,5 @@ int main() {
 
     return 0;
 }
+
 
